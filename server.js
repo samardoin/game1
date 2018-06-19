@@ -3,7 +3,6 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 
-users=[];
 connections=[];
 
 server.listen(process.env.PORT || 8080);
@@ -19,6 +18,10 @@ io.sockets.on('connection', function(socket){
   console.log('Connected:  sockets connected', connections.length);
 
   socket.on('disconnect', function(data){
+    for (var i = 0; i < connections.length; i++){
+      console.log()
+      if (connections[i].id == socket.id){connections.splice(i,1);break;}
+    }
     console.log('Disconnected:  sockets connected',connections.length);
   });
 
