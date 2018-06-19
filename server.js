@@ -3,7 +3,10 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 
-connections=[];
+var player_file = require('./server/player.js');
+
+var player_list=[];
+
 
 server.listen(process.env.PORT || 8080);
 console.log("server running");
@@ -14,15 +17,17 @@ app.get('/',function(req,res){
 });
 
 io.sockets.on('connection', function(socket){
-  connections.push(socket);
-  console.log('Connected:  sockets connected', connections.length);
+  var p = new player_file.Player();
+  p.id = socket.id;
+  player_list.push(p);
+  console.log('Connected:  players connected:', player_list.length);
 
   socket.on('disconnect', function(data){
-    for (var i = 0; i < connections.length; i++){
+    for (var i = 0; i < player_list.length; i++){
       console.log()
-      if (connections[i].id == socket.id){connections.splice(i,1);break;}
+      if (player_list[i].id == socket.id){player_list.splice(i,1);break;}
     }
-    console.log('Disconnected:  sockets connected',connections.length);
+    console.log('Disconnected:  sockets connected',player_list.length);
   });
 
 });
