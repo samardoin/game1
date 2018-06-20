@@ -6,7 +6,7 @@ exports.Node=function(){
 
 exports.Graph=function(){
   this.masterNode = new exports.Node();
-  this.printNodes=function(){
+  this.updateNodes=function(action){
     var level = 1;
     var level_edges=[];
     var cn = this.masterNode;
@@ -15,7 +15,8 @@ exports.Graph=function(){
         level_edges[String(level)]=cn.children.length;
       }
       if (level_edges[String(level)] == 0){
-        console.log('data:' + cn.data);
+        //console.log('data:' + cn.data);
+        action(cn);
         if (level == 1){return;}
         delete level_edges[String(level)];
         level--;

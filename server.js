@@ -18,7 +18,8 @@ a2_2.parent=a2;a2.children.push(a2_2);
 a2.parent=mn;mn.children.push(a2);
 a1.parent=mn;mn.children.push(a1);
 g.masterNode=mn;
-g.printNodes();
+//g.printNodes();
+g.updateNodes(node => console.log("data:" + node.data));
 
 var player_list=[];
 
