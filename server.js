@@ -4,25 +4,8 @@ var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 
 var player_file = require('./server/player.js');
-
-var graph_file = require('./server/graph.js');
-
-var g = new graph_file.Graph();
-var mn = new graph_file.Node();mn.data="mn";
-var a1 = new graph_file.Node();a1.data="a1";
-var a2 = new graph_file.Node();a2.data="a2";
-var a2_1 = new graph_file.Node();a2_1.data="a2_1";
-var a2_2 = new graph_file.Node();a2_2.data="a2_2";
-a2_1.parent=a2;a2.children.push(a2_1);
-a2_2.parent=a2;a2.children.push(a2_2);
-a2.parent=mn;mn.children.push(a2);
-a1.parent=mn;mn.children.push(a1);
-g.masterNode=mn;
-//g.printNodes();
-g.updateNodes(node => console.log("data:" + node.data));
-
+var contraption_file = require('./server/contraption.js');
 var player_list=[];
-
 
 server.listen(process.env.PORT || 8080);
 console.log("server running");
@@ -50,7 +33,6 @@ io.sockets.on('connection', function(socket){
     }
     console.log('Disconnected:  sockets connected',player_list.length);
   });
-
 });
 
 function update_game(){
