@@ -56,6 +56,10 @@ exports.start=function(){//example
   combine(masterNode, getNewNode(connection2()));
   combine(masterNode, getNewNode(connection2()));
   combine(partialNodes[2], getNewNode(square_part()));
+  combine(partialNodes[4], getNewNode(connection2()));
+  combine(partialNodes[4], getNewNode(connection2()));
+  combine(partialNodes[4], getNewNode(connection2()));
+  
 
 
   view_partial_Nodes();
@@ -127,7 +131,7 @@ print_cords=function(masterNode){
   var test_distance=10;
 
   var getXY=function(brother,number,distance,angadd){
-    console.log("b:" + brother + "\tN:" + number + "\tD:" + distance)
+    //console.log("b:" + brother + "\tN:" + number + "\tD:" + distance)
     var angle = 0;
     var gx=0.0,gy=0.0;
     if (brother<=1){angle=0;}
@@ -148,13 +152,15 @@ print_cords=function(masterNode){
 
   var brothers = masterNode.children.length;
 
+  //test area
+  correctionsQ.push({x:0,y:0,ang:(Math.PI/2)});
 
   var up=function(cn, level){
     var s = "";
     for (var i = 0; i < level+1;i++){s+='  ';}
     brothers=cn.parent.children.length;
-    console.log("UP:\t"+cn.data.name+"\t" + cn.data.id + "\tchildren:" +cn.children.length
-    +"\tbrothers:" + brothers);
+    //console.log("UP:\t"+cn.data.name+"\t" + cn.data.id + "\tchildren:" +cn.children.length
+    //+"\tbrothers:" + brothers);
     //find number
     var t = cn.parent.children;
     var number = 0;
@@ -177,13 +183,12 @@ print_cords=function(masterNode){
     for (var i = 0; i < level+1;i++){s+='  ';}
     if (cn.parent==null){brothers=0;}
     else{brothers=cn.parent.children.length;}
-    console.log("DN:\t"+cn.data.name+"\t" + cn.data.id + "\tchildren:" +cn.children.length
-    +"\tbrothers:" + brothers);
+    //console.log("DN:\t"+cn.data.name+"\t" + cn.data.id + "\tchildren:" +cn.children.length
+    //+"\tbrothers:" + brothers);
     correctionsQ.pop();
   }
   var action=function(cn, level){}
   graphs.updateNodesUpDown(masterNode,action,up,down);
-  console.log('\n');
   for (var i = 0; i < totalCorrections.length;i++){
     var tc = totalCorrections[i];
     console.log("char:" + tc.char + "\tx:" +tc.x + "\ty:" + tc.y);
