@@ -5,6 +5,7 @@ var io = require('socket.io').listen(server);
 
 var player_file = require('./server/player.js');
 var contraption_file = require('./server/contraption.js');
+contraption_file.start();
 var player_list=[];
 
 server.listen(process.env.PORT || 8080);
