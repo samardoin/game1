@@ -13,6 +13,18 @@
     socket.on('connect',function(){
       socket.emit('connection_successful');
     });
+    socket.on('cords',function(e){
+      if (loaded == true){
+        for (var i = 0; i < e.length;i++){
+          //console.log('drawing cord');
+          drawCord(e[i]);
+        }
+      }
+      else {
+        console.log('not loaded');
+      }
+
+    });
 
     </script>
   </body>

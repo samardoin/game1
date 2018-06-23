@@ -1,6 +1,4 @@
 var graphs = require('./graph.js');
-
-
 var unique = 0;
 
 Part=function(){
@@ -8,11 +6,12 @@ Part=function(){
   this.id = null;
   this.slotsMax=0;
   this.char = '';
+  this.ang = null;
 }
 square_part=function(){
   var p = new Part();
   p.name="square_body";
-  p.slotsMax=4;
+  p.slotsMax=10;
   p.id=unique++;
   p.char='A';
   return  p;
@@ -20,7 +19,7 @@ square_part=function(){
 connection2=function(){
   var p = new Part();
   p.name="connection2";
-  p.slotsMax=2;
+  p.slotsMax=10;
   p.id=unique++;
   p.char='B';
   return  p;
@@ -52,22 +51,24 @@ var masterNode = new graphs.Node();
 var partialNodes=[]
 exports.start=function(){//example
   masterNode = getNewNode(square_part());
+  masterNode.data.ang=Math.PI/2;
   combine(masterNode, getNewNode(connection2()));
   combine(masterNode, getNewNode(connection2()));
   combine(masterNode, getNewNode(connection2()));
-  combine(partialNodes[2], getNewNode(square_part()));
-  combine(partialNodes[4], getNewNode(connection2()));
-  combine(partialNodes[4], getNewNode(connection2()));
-  combine(partialNodes[4], getNewNode(connection2()));
-  
+
+
+
+
+
+
+
 
 
   view_partial_Nodes();
   printDataCenter(masterNode);
-  getContraptionString(masterNode);
+  //getContraptionString(masterNode);
 
-  print_cords(masterNode);
-  //combine(masterNode,((new graphs.Node).data=connection2()));
+  return get_cords(masterNode);
 }
 
 getNewNode=function(ndata){
@@ -119,57 +120,84 @@ getContraptionString=function(masterNode){
     }
     else {o+=out[i].char;}
   }
-  //console.log("\tclose:" + close + "\topen:" + open + "\t::" + o);
   while (close !=0){close++;o+="]";}
   console.log("::" + o);
 }
 
-print_cords=function(masterNode){
-  console.log("print_cords");
+get_cords=function(masterNode){
   var correctionsQ=[];
   var totalCorrections=[];
-  var test_distance=10;
-
-  var getXY=function(brother,number,distance,angadd){
-    //console.log("b:" + brother + "\tN:" + number + "\tD:" + distance)
+  var test_distance=30;
+  var getXY=function(brother,number,distance,angadd,new_cn){
+    number=brother-number;
     var angle = 0;
     var gx=0.0,gy=0.0;
     if (brother<=1){angle=0;}
-    else {
-      angle=((brother-2)*(2*Math.PI))/brother;
+    else if (brother==2){angle=Math.PI;}
+    else if (brother%2==0) {
+      angle=(((brother*2)-2)*(2*Math.PI))/(brother*2);
     }
-    //if (angadd!=0){console.log("BEFORE:"+angle)}
-    angle*=number;
-    angle+=angadd;
-    //if (angadd!=0){console.log("AFTER:"+angle + "\tbrothers:" + brother +"\tnumber:" + number)}
-    gx=distance*Math.cos(angle);
-    gy=distance*Math.sin(angle);
+    else {
+      angle =((brother-2)*(2*Math.PI))/brother;
+    }
+    //angle=angle*number;
+    //angle+=angadd;
+    gx=distance*Math.cos(angle*(number)+angadd);
+    gy=distance*Math.sin(angle*(number)+angadd);
+
+    new_cn.data.ang = angle*(number)+angadd+Math.PI*2;
+
     return {x:gx,
       y:gy,
-      ang:angle
+      ang:angadd+angle*(number)
     };
   }
 
-  var brothers = masterNode.children.length;
+  var newXY=function(contiguity, number, distance, new_cn){
 
-  //test area
+    if (new_cn.parent != null && new_cn.parent.parent!=null){
+      console.log('ADDING N')
+      number++;
+    }
+    var angle = 0;
+    if (contiguity<=1){angle=0;}
+    else if (contiguity==2){angle=Math.PI;}
+    else if (contiguity%2==0){//contiguity even
+      angle = (((contiguity*2)-2)*(2*Math.PI))/(contiguity*2);
+    }
+    else {//contiguity odd
+      angle =((contiguity-2)*(2*Math.PI))/contiguity;
+    }
+
+
+    var angadd = new_cn.parent.data.ang;
+    gx=distance*Math.cos(angle*(number)+angadd);
+    gy=distance*Math.sin(angle*(number)+angadd);
+
+    new_cn.data.ang = Math.PI + angle*(number)+angadd;
+
+    return ({x:gx,y:gy});
+  }
+
+  var contiguitys = masterNode.children.length;
   correctionsQ.push({x:0,y:0,ang:(Math.PI/2)});
-
   var up=function(cn, level){
     var s = "";
     for (var i = 0; i < level+1;i++){s+='  ';}
-    brothers=cn.parent.children.length;
-    //console.log("UP:\t"+cn.data.name+"\t" + cn.data.id + "\tchildren:" +cn.children.length
-    //+"\tbrothers:" + brothers);
+    contiguitys=cn.parent.children.length;
+    if (cn.parent.parent != undefined & cn.parent.parent != null ){
+      contiguitys++;
+    }
+
     //find number
     var t = cn.parent.children;
     var number = 0;
     for (;t[number].data.id!=cn.data.id;number++);
     var angle = 0;
-    if (correctionsQ!=undefined&&correctionsQ.length>=1){
-      angle=correctionsQ[correctionsQ.length-1].ang;
-    }
-    correctionsQ.push(getXY(brothers,number,test_distance,angle))
+
+    angle = cn.parent.data.ang;
+
+    correctionsQ.push(newXY(contiguitys,number,test_distance,cn))
     var fx=0.0,fy=0.0;
     for (var l = 0; l < correctionsQ.length;l++){
       fx+=correctionsQ[l].x;
@@ -181,17 +209,23 @@ print_cords=function(masterNode){
   var down=function(cn, level){
     var s = "";
     for (var i = 0; i < level+1;i++){s+='  ';}
-    if (cn.parent==null){brothers=0;}
-    else{brothers=cn.parent.children.length;}
-    //console.log("DN:\t"+cn.data.name+"\t" + cn.data.id + "\tchildren:" +cn.children.length
-    //+"\tbrothers:" + brothers);
+    if (cn.parent==null){contiguitys=0;}
+    else{
+      contiguitys=cn.parent.children.length;
+      if (cn.parent.parent != undefined & cn.parent.parent != null ){
+        contiguitys++;
+      }
+    }
     correctionsQ.pop();
   }
   var action=function(cn, level){}
   graphs.updateNodesUpDown(masterNode,action,up,down);
+  var out = [];
   for (var i = 0; i < totalCorrections.length;i++){
     var tc = totalCorrections[i];
     console.log("char:" + tc.char + "\tx:" +tc.x + "\ty:" + tc.y);
+    out.push({char: tc.char, x: tc.x, y:tc.y});
   }
-  console.log("print_cords_end");
+  out.push({char: masterNode.char, x: 0, y:0});
+  return out;
 }

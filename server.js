@@ -5,7 +5,7 @@ var io = require('socket.io').listen(server);
 
 var player_file = require('./server/player.js');
 var contraption_file = require('./server/contraption.js');
-contraption_file.start();
+var cordinates = contraption_file.start();
 var player_list=[];
 
 server.listen(process.env.PORT || 8080);
@@ -21,10 +21,11 @@ io.sockets.on('connection', function(socket){
   p.id = socket.id;
   player_list.push(p);
   console.log('Connected:  players connected:', player_list.length);
-
   socket.on('connection_successful',function(){
     socket.join('update_room');
 
+    //console.log("CORDINATES:" + cordinates.length);
+    socket.emit('cords',cordinates);
   });
 
   socket.on('disconnect', function(data){
