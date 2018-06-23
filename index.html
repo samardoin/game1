@@ -10,18 +10,21 @@
     The server is up and running!
     <script>
     var socket = io.connect();
-    socket.on('connect',function(){
-      socket.emit('connection_successful');
+
+    let connect_promise = new Promise((resolve, reject) => {
+      socket.on('connect',function(){
+        console.log('connected!');
+        resolve('connected');
+      });
+    });
+
+    Promise.all([connect_promise, canvas_promise]).then(function(values) {
+        console.log('emitting!');
+        socket.emit('connection_successful');
     });
     socket.on('cords',function(e){
-      if (loaded == true){
-        for (var i = 0; i < e.length;i++){
-          //console.log('drawing cord');
-          drawCord(e[i]);
-        }
-      }
-      else {
-        console.log('not loaded');
+      for (var i = 0; i < e.length;i++){
+        drawCord(e[i]);
       }
 
     });

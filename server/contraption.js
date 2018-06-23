@@ -40,12 +40,17 @@ exports.start=function(){//example
   combine(masterNode, parts.getNewNode(parts.connection_2()));
 
   combine(partialNodes[2], parts.getNewNode(parts.connection_2()));
-  combine(partialNodes[2], parts.getNewNode(parts.connection_2()));
-  combine(partialNodes[2], parts.getNewNode(parts.connection_2()));
+  combine(partialNodes[4], parts.getNewNode(parts.square_part()));
+  combine(partialNodes[5], parts.getNewNode(parts.connection_2()));
+  combine(partialNodes[5], parts.getNewNode(parts.connection_2()));
+  combine(partialNodes[5], parts.getNewNode(parts.connection_2()));
+  
+
+
 
 
   //printPartialNodes();
-  //printContraptionCenter();
+  printContraptionCenter();
 
   return get_cords(masterNode);
 }
@@ -82,7 +87,6 @@ get_cords=function(){
   var newXY=function(contiguity, number, distance, new_cn){
 
     if (new_cn.parent != null && new_cn.parent.parent!=null){
-      console.log('ADDING N')
       number++;
     }
     var angle = 0;
@@ -142,7 +146,7 @@ get_cords=function(){
   var out = [];
   for (var i = 0; i < totalCorrections.length;i++){
     var tc = totalCorrections[i];
-    console.log("name:" + tc.name + "\tx:" +tc.x + "\ty:" + tc.y);
+    //console.log("name:" + tc.name + "\tx:" +tc.x + "\ty:" + tc.y);
     out.push({name: tc.name, x: tc.x, y:tc.y});
   }
   out.push({name: masterNode.name, x: 0, y:0});

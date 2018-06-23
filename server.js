@@ -23,8 +23,6 @@ io.sockets.on('connection', function(socket){
   console.log('Connected:  players connected:', player_list.length);
   socket.on('connection_successful',function(){
     socket.join('update_room');
-
-    //console.log("CORDINATES:" + cordinates.length);
     socket.emit('cords',cordinates);
   });
 
