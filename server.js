@@ -21,6 +21,7 @@ io.sockets.on('connection', function(socket){
   p.id = socket.id;
   player_list.push(p);
   console.log('Connected:  players connected:', player_list.length);
+  
   socket.on('connection_successful',function(){
     socket.join('update_room');
     socket.emit('cords',cordinates);

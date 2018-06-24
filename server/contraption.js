@@ -39,12 +39,33 @@ exports.start=function(){//example
   combine(masterNode, parts.getNewNode(parts.connection_2()));
   combine(masterNode, parts.getNewNode(parts.connection_2()));
 
-  combine(partialNodes[2], parts.getNewNode(parts.connection_2()));
-  combine(partialNodes[4], parts.getNewNode(parts.square_part()));
-  combine(partialNodes[5], parts.getNewNode(parts.connection_2()));
-  combine(partialNodes[5], parts.getNewNode(parts.connection_2()));
-  combine(partialNodes[5], parts.getNewNode(parts.connection_2()));
-  
+  combine(partialNodes[2], parts.getNewNode(parts.square_part()));
+  combine(partialNodes[4], parts.getNewNode(parts.connection_2()));
+  combine(partialNodes[4], parts.getNewNode(parts.connection_2()));
+
+  combine(partialNodes[1],parts.getNewNode(parts.square_part()));
+  combine(partialNodes[7],parts.getNewNode(parts.connection_2()));
+  combine(partialNodes[7],parts.getNewNode(parts.connection_2()));
+
+  combine(partialNodes[8],parts.getNewNode(parts.square_part()));
+  combine(partialNodes[10],parts.getNewNode(parts.connection_2()));
+  combine(partialNodes[10],parts.getNewNode(parts.connection_2()));
+
+  combine(partialNodes[11],parts.getNewNode(parts.square_part()));
+  combine(partialNodes[13],parts.getNewNode(parts.connection_2()));
+  combine(partialNodes[13],parts.getNewNode(parts.connection_2()));
+
+  combine(partialNodes[14],parts.getNewNode(parts.square_part()));
+  combine(partialNodes[16],parts.getNewNode(parts.connection_2()));
+  combine(partialNodes[16],parts.getNewNode(parts.connection_2()));
+
+  combine(partialNodes[17],parts.getNewNode(parts.connection_2()));
+
+
+
+
+
+
 
 
 
@@ -126,7 +147,7 @@ get_cords=function(){
       fx+=correctionsQ[l].x;
       fy+=correctionsQ[l].y;
     }
-    totalCorrections.push({name:cn.data.name+",",x:fx,y:fy});
+    totalCorrections.push({name:cn.data.name+",",x:fx,y:fy,r:cn.data.ang});
 
   }
   var down=function(cn, level){
@@ -144,11 +165,11 @@ get_cords=function(){
   var action=function(cn, level){}
   graphs.updateNodesUpDown(masterNode,action,up,down);
   var out = [];
+  out.push({name: masterNode.name, x: 0, y:0, r: masterNode.data.ang});
   for (var i = 0; i < totalCorrections.length;i++){
     var tc = totalCorrections[i];
     //console.log("name:" + tc.name + "\tx:" +tc.x + "\ty:" + tc.y);
-    out.push({name: tc.name, x: tc.x, y:tc.y});
+    out.push({name: tc.name, x: tc.x, y:tc.y, r:tc.r});
   }
-  out.push({name: masterNode.name, x: 0, y:0});
   return out;
 }
