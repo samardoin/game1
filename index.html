@@ -1,18 +1,25 @@
 <html>
   <header>
     <title>Template</title>
-    <canvas id="gameCanvas" width="800" height="800"></canvas><br>
+    <canvas id="gameCanvas" width="500" height="500"></canvas><br>
     <script src="/socket.io/socket.io.js"></script>
     <!--<script src="/drawer.js"></script>-->
     <script src="/canvas.js"></script>
+    <script src='/input.js'></script>
   </header>
   <body>
     The server is up and running!
     <script>
     var socket = io.connect();
     socket.on('player_edit',function(e){
-      drawCord(e);
+      //drawCord(e);
     });
+    socket.on('update',function(e){
+      //console.log("UPDATE")
+      //console.log(e)
+      drawCord(e);
+      socket.emit('update_input', input);
+    })
 
     let connect_promise = new Promise((resolve, reject) => {
       socket.on('connect',function(){

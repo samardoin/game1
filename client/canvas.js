@@ -17,6 +17,8 @@ let canvas_promise = new Promise((resolve, reject) => {
     cheight=canvas.height;
     colorRect(0,0,cwidth,cheight,'whiteSmoke');
 
+    addEventListeners();
+
     //drawCir(200,200,10);
     console.log('loaded');
     resolve('loaded');

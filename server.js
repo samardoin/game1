@@ -17,7 +17,6 @@ app.get('/',function(req,res){
 
 io.sockets.on('connection', function(socket){
   console.log('Connected:  players connected:', ++player_number);
-
   socket.on('connection_successful',function(){
     contraption_manager_file.new_contraption(Math.floor(Math.random() * 500),
       Math.floor(Math.random() * 500),
@@ -25,6 +24,9 @@ io.sockets.on('connection', function(socket){
     socket.join('update_room');
     io.to('update_room').emit('player_edit',contraption_manager_file.get_contraptions());
   });
+  socket.on('update_input',function(e){
+    contraption_manager_file.set_input(socket.id,e);
+  })
 
   socket.on('disconnect', function(data){
     contraption_manager_file.remove_contraption(socket.id);
@@ -36,9 +38,13 @@ io.sockets.on('connection', function(socket){
 function update_game(){
   var framesPerSecond=50;
   setInterval(function(){
-    check_if_contraption_changed();
+    //check_if_contraption_changed();
+    contraption_manager_file.update();
+    io.to('update_room').emit('update',
+      contraption_manager_file.get_contraptions());
+
     //1) update world
     //2) send rendering info
   },1000/framesPerSecond);
 }
-//update_game();
+update_game();
