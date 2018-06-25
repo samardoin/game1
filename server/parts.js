@@ -5,6 +5,10 @@ exports.Part=function(){
   this.id = null;
   this.slotsMax=0;
   this.ang = null;
+  this.x = null;
+  this.y = null;
+  this.width = null;
+  this.height = null;
 }
 exports.getNewNode=function(ndata){
   var n1 = new graphs.Node();
@@ -19,6 +23,8 @@ exports.square_part=function(){
   p.name="square_body";
   p.slotsMax=10;
   p.id=unique++;
+  p.width=20;
+  p.height=20;
   return  p;
 }
 
@@ -28,5 +34,8 @@ exports.connection_2=function(){
   p.name="connection_2";
   p.slotsMax=10;
   p.id=unique++;
+  p.big=20;//60
+  p.width=15;
+  p.height=60;
   return  p;
 }

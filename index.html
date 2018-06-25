@@ -10,6 +10,9 @@
     The server is up and running!
     <script>
     var socket = io.connect();
+    socket.on('player_edit',function(e){
+      drawCord(e);
+    });
 
     let connect_promise = new Promise((resolve, reject) => {
       socket.on('connect',function(){
@@ -21,12 +24,6 @@
     Promise.all([connect_promise, canvas_promise]).then(function(values) {
         console.log('emitting!');
         socket.emit('connection_successful');
-    });
-    socket.on('cords',function(e){
-      for (var i = 0; i < e.length;i++){
-        drawCord(e[i]);
-      }
-
     });
 
     </script>

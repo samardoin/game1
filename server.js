@@ -4,9 +4,8 @@ var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 
 var player_file = require('./server/player.js');
-var contraption_file = require('./server/contraption.js');
-var cordinates = contraption_file.start();
-var player_list=[];
+var contraption_manager_file = require('./server/contraption_manager.js')
+var player_number = 0;
 
 server.listen(process.env.PORT || 8080);
 console.log("server running");
@@ -17,28 +16,27 @@ app.get('/',function(req,res){
 });
 
 io.sockets.on('connection', function(socket){
-  var p = new player_file.Player();
-  p.id = socket.id;
-  player_list.push(p);
-  console.log('Connected:  players connected:', player_list.length);
-  
+  console.log('Connected:  players connected:', ++player_number);
+
   socket.on('connection_successful',function(){
+    contraption_manager_file.new_contraption(Math.floor(Math.random() * 500),
+      Math.floor(Math.random() * 500),
+      socket.id);
     socket.join('update_room');
-    socket.emit('cords',cordinates);
+    io.to('update_room').emit('player_edit',contraption_manager_file.get_contraptions());
   });
 
   socket.on('disconnect', function(data){
-    for (var i = 0; i < player_list.length; i++){
-      console.log()
-      if (player_list[i].id == socket.id){player_list.splice(i,1);break;}
-    }
-    console.log('Disconnected:  sockets connected',player_list.length);
+    contraption_manager_file.remove_contraption(socket.id);
+    io.to('update_room').emit('player_edit',contraption_manager_file.get_contraptions());
+    console.log('Disconnected:  sockets connected',--player_number);
   });
 });
 
 function update_game(){
   var framesPerSecond=50;
   setInterval(function(){
+    check_if_contraption_changed();
     //1) update world
     //2) send rendering info
   },1000/framesPerSecond);
