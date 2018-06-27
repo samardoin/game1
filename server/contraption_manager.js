@@ -29,12 +29,13 @@ exports.new_contraption=function(x,y,id){
   m.id=id;
   m.isUpdated=true;
   managers.push(m);
-  id_managerIndex[id]=managers.length-1;
+  id_managerIndex[id]=parseInt(managers.length-1);
 }
 
 exports.get_contraptions=function(){
   var out = [];
   for (let i = 0; i < managers.length;i++){
+    if (managers[i]==null) continue;
     var cords = managers[i].contraption.get_cords();
     out.push({cord:cords, xo:managers[i].x, yo:managers[i].y});
     managers[i].isUpdated=false;
@@ -44,6 +45,7 @@ exports.get_contraptions=function(){
 exports.get_contraptions=function(){
   var out = [];
   for (let i = 0; i < managers.length;i++){
+    if (managers[i]==null) continue;
     var cords = managers[i].contraption.get_cords();
     out.push({cord:cords, xo:managers[i].x, yo:managers[i].y});
     managers[i].isUpdated=false;
@@ -53,6 +55,7 @@ exports.get_contraptions=function(){
 exports.get_contraptions_altered=function(){
   var out = [];
   for (let i = 0; i < managers.length;i++){
+    if (managers[i]==null) continue;
     if (managers[i].isUpdated==true){
       var cords = managers[i].contraption.get_cords();
       out.push({cord:cords, xo:managers[i].x, yo:managers[i].y});
@@ -63,26 +66,29 @@ exports.get_contraptions_altered=function(){
 }
 
 exports.remove_contraption = function(id){
-  for (let i = 0; i < managers.length;i++){
-    if (managers[i].id == id){managers.splice(i,1);return;}
-  }
+  var index = parseInt(id_managerIndex[id]);
+  managers[index]=null;
+  delete id_managerIndex[id];
 }
 
 exports.set_input=function(id, input){
-  if (!(managers[id_managerIndex[id]].input===input)){
-    var index = id_managerIndex[id];
+  var m = managers[parseInt(id_managerIndex[id])];
+  var b = (m!=undefined);
+  if ((b)&&(!(m.input===input))){
+    var index = parseInt(id_managerIndex[id]);
     managers[index].isUpdated = true;
     managers[index].input = input;
   }
 }
 
 get_manager_id=function(id){
-  return managers[id_managerIndex[id]];
+  return managers[parseInt(id_managerIndex[id])];
 }
 
 var distance = 2;
 exports.update=function(){
   for (let i = 0; i < managers.length;i++){
+    if (managers[i]==null) continue;
     if (managers[i].input.up){
       //console.log('up');
       managers[i].y+=distance;

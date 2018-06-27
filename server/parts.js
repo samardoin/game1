@@ -18,22 +18,22 @@ exports.getNewNode=function(ndata){
 
 //==========BODYS===========
 var unique=0;
-exports.square_part=function(){
+exports.square_part=function(id){
   var p = new exports.Part();
   p.name="square_body";
   p.slotsMax=10;
-  p.id=unique++;
+  p.id=id;
   p.width=20;
   p.height=20;
   return  p;
 }
 
 //======CONNECTIONS=========
-exports.connection_2=function(){
+exports.connection_2=function(id){
   var p = new exports.Part();
   p.name="connection_2";
   p.slotsMax=10;
-  p.id=unique++;
+  p.id=id;
   p.big=20;//60
   p.width=15;
   p.height=60;

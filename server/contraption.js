@@ -1,37 +1,37 @@
 exports.Contraption=function(){
   var graphs = require('./graph.js');
   var parts = require('./parts.js');
-  var unique = 0;
+  this.unique = 0;
 
   var masterNode = new graphs.Node();
   var partialNodes=[];
 
   this.setUp =function(){
-    masterNode = parts.getNewNode(parts.square_part());
+    masterNode = parts.getNewNode(parts.square_part(this.unique++));
     masterNode.data.ang=Math.PI/2;
     masterNode.data.x=0;
     masterNode.data.y=0;
 
-    combine(masterNode, parts.getNewNode(parts.connection_2()));
-    combine(masterNode, parts.getNewNode(parts.connection_2()));
+    combine(masterNode, parts.getNewNode(parts.connection_2(this.unique++)));
+    combine(masterNode, parts.getNewNode(parts.connection_2(this.unique++)));
 
     var num = Math.floor(Math.random() * 4);
     if (num == 1){
-      combine(masterNode, parts.getNewNode(parts.connection_2()));
+      combine(masterNode, parts.getNewNode(parts.connection_2(this.unique++)));
     }
     else if (num == 2){
-      combine(masterNode, parts.getNewNode(parts.connection_2()));
-      combine(masterNode, parts.getNewNode(parts.connection_2()));
+      combine(masterNode, parts.getNewNode(parts.connection_2(this.unique++)));
+      combine(masterNode, parts.getNewNode(parts.connection_2(this.unique++)));
     }
     else if (num == 3){
       var count = 0;
-      combine(masterNode, parts.getNewNode(parts.connection_2()));
+      combine(masterNode, parts.getNewNode(parts.connection_2(this.unique++)));
       for (var key in partialNodes) {if (count == 1)break;count++;}
-      combine(partialNodes[key], parts.getNewNode(parts.square_part()));
+      combine(partialNodes[key], parts.getNewNode(parts.square_part(this.unique++)));
       for (var key in partialNodes) {if (count == 5)break;count++;}
-      combine(partialNodes[key], parts.getNewNode(parts.connection_2()));
-      combine(partialNodes[key], parts.getNewNode(parts.connection_2()));
-      
+      combine(partialNodes[key], parts.getNewNode(parts.connection_2(this.unique++)));
+      combine(partialNodes[key], parts.getNewNode(parts.connection_2(this.unique++)));
+
     }
 
 
