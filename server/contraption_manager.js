@@ -4,6 +4,8 @@ var contraption_file = require('./contraption.js');
 var managers=[];
 var id_managerIndex=[];
 
+var id_managers=[]//*****!!!!!!!!!
+
 var inputter=function(){
   up=false;
   down=false;
@@ -28,81 +30,49 @@ exports.new_contraption=function(x,y,id){
   m.y=y;
   m.id=id;
   m.isUpdated=true;
-  managers.push(m);
-  id_managerIndex[id]=parseInt(managers.length-1);
+  id_managers[id]=m;
 }
 
 exports.get_contraptions=function(){
   var out = [];
-  for (let i = 0; i < managers.length;i++){
-    if (managers[i]==null) continue;
-    var cords = managers[i].contraption.get_cords();
-    out.push({cord:cords, xo:managers[i].x, yo:managers[i].y});
-    managers[i].isUpdated=false;
-  }
-  return out;
-}
-exports.get_contraptions=function(){
-  var out = [];
-  for (let i = 0; i < managers.length;i++){
-    if (managers[i]==null) continue;
-    var cords = managers[i].contraption.get_cords();
-    out.push({cord:cords, xo:managers[i].x, yo:managers[i].y});
-    managers[i].isUpdated=false;
+  for (let key in id_managers){
+    var cords = id_managers[key].contraption.get_cords();
+    out.push({cord:cords, xo:id_managers[key].x, yo:id_managers[key].y});
+    id_managers[key].isUpdated=false;
   }
   return out;
 }
 exports.get_contraptions_altered=function(){
   var out = [];
-  for (let i = 0; i < managers.length;i++){
-    if (managers[i]==null) continue;
-    if (managers[i].isUpdated==true){
-      var cords = managers[i].contraption.get_cords();
-      out.push({cord:cords, xo:managers[i].x, yo:managers[i].y});
-      managers[i].isUpdated=false;
+  for (let key in id_managers){
+    if (id_managers[key].isUpdated){
+      var cords = id_managers[key].contraption.get_cords();
+      out.push({cord:cords, xo:id_managers[key].x, yo:id_managers[key].y});
+      id_managers[key].isUpdated=false;
     }
   }
   return out;
 }
 
 exports.remove_contraption = function(id){
-  var index = parseInt(id_managerIndex[id]);
-  managers[index]=null;
-  delete id_managerIndex[id];
+  delete id_managers[id];
 }
 
 exports.set_input=function(id, input){
-  var m = managers[parseInt(id_managerIndex[id])];
-  var b = (m!=undefined);
-  if ((b)&&(!(m.input===input))){
-    var index = parseInt(id_managerIndex[id]);
-    managers[index].isUpdated = true;
-    managers[index].input = input;
+  if (!(id_managers[id].input===input)){
+    id_managers[id].isUpdated=true;
+    id_managers[id].input=input;
   }
 }
 
-get_manager_id=function(id){
-  return managers[parseInt(id_managerIndex[id])];
-}
 
 var distance = 2;
 exports.update=function(){
-  for (let i = 0; i < managers.length;i++){
-    if (managers[i]==null) continue;
-    if (managers[i].input.up){
-      //console.log('up');
-      managers[i].y+=distance;
-    }
-    else if (managers[i].input.down){
-      managers[i].y-=distance
-    }
-    if (managers[i].input.left){
+  for (let key in id_managers){
+    if (id_managers[key].input.up) id_managers[key].y+= distance;
+    else if (id_managers[key].input.down) id_managers[key].y-=distance;
 
-      managers[i].x-=distance;
-    }
-    else if (managers[i].input.right){
-      managers[i].x+=distance;
-    }
-
+    if (id_managers[key].input.left){id_managers[key].x-=distance;}
+    else if (id_managers[key].input.right) id_managers[key].x+=distance;
   }
 }
