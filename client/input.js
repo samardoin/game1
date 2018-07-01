@@ -72,6 +72,7 @@ function addEventListeners(){
         input.left=false;
         input.right=false;
         break;
+      
       default:
         break;
     }

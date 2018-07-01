@@ -42,15 +42,27 @@ function drawCir(x,y,r){
 //Here
 var drawCord=function(e){
   colorRect(0,0,canvas.width,canvas.height,'whiteSmoke')
+  var isplayer =false;
+  var px=0, py=0;
+  for (var i = 0; i < e.length; i++){
+    if (e[i].id==socket.id){
+      px=e[i].xo;
+      py=e[i].yo;
+      px-= canvas.width/2;
+      py-=canvas.height/2;
+      break;
+    }
+  }
   for (var i = 0; i < e.length; i++){
     var all = e[i].cord;
+    if (e[i].id==socket.id) isplayer= true;
     //xp=e[i].xo;yp=e[i].yo;
     //ctx.translate(xp-xlp,-(yp-ylp));
     for (var j = 0; j < all.length;j++){
       var now = all[j];
       //console.log("X:" + e[i].xo + "\tY:" + e[i].yo);
       var x_correct = 0, y_correct = 0;
-      x_correct+=e[i].xo;y_correct+=e[i].yo;
+      x_correct+=e[i].xo-px;y_correct+=e[i].yo-py;
       //x_correct+=canvas.width/2;y_correct+=canvas.height/2;
       var size = 5;
       var im;
