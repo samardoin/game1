@@ -22,7 +22,8 @@
     })
 
     let connect_promise = new Promise((resolve, reject) => {
-      socket.on('connect',function(){
+      socket.on('connect',function(e){
+        console.log("id:" + socket.id);
         console.log('connected!');
         resolve('connected');
       });

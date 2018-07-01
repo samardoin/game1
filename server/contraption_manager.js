@@ -37,7 +37,7 @@ exports.get_contraptions=function(){
   var out = [];
   for (let key in id_managers){
     var cords = id_managers[key].contraption.get_cords();
-    out.push({cord:cords, xo:id_managers[key].x, yo:id_managers[key].y});
+    out.push({cord:cords, xo:id_managers[key].x, yo:id_managers[key].y,id:id_managers[key].id});
     id_managers[key].isUpdated=false;
   }
   return out;

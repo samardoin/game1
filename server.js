@@ -22,6 +22,7 @@ io.sockets.on('connection', function(socket){
       Math.floor(Math.random() * 500),
       socket.id);
     socket.join('update_room');
+    socket.emit('id')
     io.to('update_room').emit('player_edit',contraption_manager_file.get_contraptions());
   });
   socket.on('update_input',function(e){

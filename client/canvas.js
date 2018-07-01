@@ -39,15 +39,19 @@ function drawCir(x,y,r){
       ctx.fill();
 
 }
+//Here
 var drawCord=function(e){
   colorRect(0,0,canvas.width,canvas.height,'whiteSmoke')
-
   for (var i = 0; i < e.length; i++){
     var all = e[i].cord;
+    //xp=e[i].xo;yp=e[i].yo;
+    //ctx.translate(xp-xlp,-(yp-ylp));
     for (var j = 0; j < all.length;j++){
       var now = all[j];
+      //console.log("X:" + e[i].xo + "\tY:" + e[i].yo);
       var x_correct = 0, y_correct = 0;
       x_correct+=e[i].xo;y_correct+=e[i].yo;
+      //x_correct+=canvas.width/2;y_correct+=canvas.height/2;
       var size = 5;
       var im;
       var doRotate = false;
@@ -69,8 +73,8 @@ var drawCord=function(e){
       y_correct+=im.height/2;
       draw_image_rotate(im, now.x+x_correct,
         canvas.height-(now.y+y_correct), (doRotate)?now.r:0);
+      //
     }
-
   }
 }
 
