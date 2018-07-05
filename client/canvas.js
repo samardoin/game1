@@ -6,6 +6,7 @@ var triangel_image = new Image();triangel_image.src='/pictures/triangel.png';
 var circle_image = new Image();circle_image.src='/pictures/circle.png';
 var joint_image = new Image();joint_image.src='/pictures/joint.png';
 var test_image = new Image();test_image.src='/pictures/test.png';
+var bg_image = new Image();bg_image.src='/pictures/bg3.png';
 
 
 
@@ -39,9 +40,17 @@ function drawCir(x,y,r){
       ctx.fill();
 
 }
+
+var drawCord_bg=function(px,py){
+  ctx.save();
+  ctx.translate(-px,py);
+  draw_image_rotate(bg_image,0,0,0);
+  ctx.drawImage(bg_image,0,0,1600,1600);
+  ctx.restore();
+}
 //Here
 var drawCord=function(e){
-  colorRect(0,0,canvas.width,canvas.height,'whiteSmoke')
+
   var isplayer =false;
   var px=0, py=0;
   for (var i = 0; i < e.length; i++){
@@ -53,6 +62,7 @@ var drawCord=function(e){
       break;
     }
   }
+  drawCord_bg(px,py);
   for (var i = 0; i < e.length; i++){
     var all = e[i].cord;
     if (e[i].id==socket.id) isplayer= true;
